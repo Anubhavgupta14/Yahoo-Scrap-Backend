@@ -25,7 +25,11 @@ class ScraperService {
     try {
       // Launch browser with specific configurations to avoid detection
       browser = await puppeteer.launch({
-        headless: 'new', // Use new headless mode
+        executablePath: 
+          process.env.NODE_ENV === 'production' 
+            ? puppeteer.executablePath() 
+            : undefined,
+        headless: true,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -35,9 +39,7 @@ class ScraperService {
           '--no-zygote',
           '--single-process',
           '--disable-gpu'
-        ],
-        // Optional: Use proxy if needed
-        // proxyServer: 'proxy-server-url'
+        ]
       });
 
       const page = await browser.newPage();
